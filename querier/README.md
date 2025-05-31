@@ -1,4 +1,4 @@
-# Tiny Search Enging Querier
+# Tiny Search Engine Querier
 ## Created by Marshall Carey-Matthews
 
 ## Structure
