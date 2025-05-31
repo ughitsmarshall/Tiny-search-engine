@@ -1,0 +1,104 @@
+ml () {  module ml "$@"
+}
+module () {  local _mlredir=1;
+ if [ -n "${MODULES_REDIRECT_OUTPUT+x}" ]; then
+ if [ "$MODULES_REDIRECT_OUTPUT" = '0' ]; then
+ _mlredir=0;
+ else
+ if [ "$MODULES_REDIRECT_OUTPUT" = '1' ]; then
+ _mlredir=1;
+ fi;
+ fi;
+ fi;
+ case " $@ " in 
+ *' --no-redirect '*)
+ _mlredir=0
+ ;;
+ *' --redirect '*)
+ _mlredir=1
+ ;;
+ esac;
+ if [ $_mlredir -eq 0 ]; then
+ _module_raw "$@";
+ else
+ _module_raw "$@" 2>&1;
+ fi
+}
+_module_raw () {  eval "$(/usr/bin/tclsh8.6 '/usr/lib/x86_64-linux-gnu/modulecmd.tcl' bash "$@")";
+ _mlstatus=$?;
+ return $_mlstatus
+}
+#!/bin/bash
+
+# test file for querier.c
+# querier pageDirectory indexFilename
+# Marshall Carey-Matthews 2 November 2024
+
+
+echo "Testing invalid args...\n"
+Testing invalid args...\n
+
+./querier sdgsdlsd sdlkjsdfljk
+pageDirectory is not a crawler directory!./querier ~/cs50-dev/shared/tse/output/wikipedia-2/ notAnIndex
+Could not open file at path: notAnIndex
+Could not build document index!./querier notaDir ~/cs50-dev/shared/tse/output/wikipedia-2.index
+pageDirectory is not a crawler directory!
+echo "Testing no args...\n"
+Testing no args...\n
+
+./querier
+Please provide pageDirectory and indexFilename only!
+echo "Testing one arg...\n"
+Testing one arg...\n
+
+./querier ~/cs50-dev/shared/tse/output/wikipedia-2/
+Please provide pageDirectory and indexFilename only!
+echo "Testing three args...\n"
+Testing three args...\n
+
+./querier ~/cs50-dev/shared/tse/output/wikipedia-2/ ~/cs50-dev/shared/tse/output/wikipedia-2.index 342902309423049
+Please provide pageDirectory and indexFilename only!
+echo "Testing valid tests...\n"
+Testing valid tests...\n
+
+./querier ~/cs50-dev/shared/tse/output/wikipedia-2/ ~/cs50-dev/shared/tse/output/wikipedia-2.index < friends
+testing.sh: line 28: friends: No such file or directory
+
+./querier ~/cs50-dev/shared/tse/output/wikipedia-2/ ~/cs50-dev/shared/tse/output/wikipedia-2.index < friends and where
+testing.sh: line 30: friends: No such file or directory
+
+./querier ~/cs50-dev/shared/tse/output/wikipedia-2/ ~/cs50-dev/shared/tse/output/wikipedia-2.index < friends and where or msg
+testing.sh: line 32: friends: No such file or directory
+
+./querier ~/cs50-dev/shared/tse/output/wikipedia-2/ ~/cs50-dev/shared/tse/output/wikipedia-2.index < where and msg
+testing.sh: line 34: where: No such file or directory
+
+./querier ~/cs50-dev/shared/tse/output/wikipedia-2/ ~/cs50-dev/shared/tse/output/wikipedia-2.index < msg
+testing.sh: line 36: msg: No such file or directory
+
+echo "\n\nTesting invalid syntax...\n"
+\n\nTesting invalid syntax...\n
+
+./querier ~/cs50-dev/shared/tse/output/wikipedia-2/ ~/cs50-dev/shared/tse/output/wikipedia-2.index < flsdkj f
+testing.sh: line 40: flsdkj: No such file or directory
+
+./querier ~/cs50-dev/shared/tse/output/wikipedia-2/ ~/cs50-dev/shared/tse/output/wikipedia-2.index < and where
+testing.sh: line 42: and: No such file or directory
+
+./querier ~/cs50-dev/shared/tse/output/wikipedia-2/ ~/cs50-dev/shared/tse/output/wikipedia-2.index < or where
+testing.sh: line 44: or: No such file or directory
+
+./querier ~/cs50-dev/shared/tse/output/wikipedia-2/ ~/cs50-dev/shared/tse/output/wikipedia-2.index < where or
+testing.sh: line 46: where: No such file or directory
+
+./querier ~/cs50-dev/shared/tse/output/wikipedia-2/ ~/cs50-dev/shared/tse/output/wikipedia-2.index < where and
+testing.sh: line 48: where: No such file or directory
+
+./querier ~/cs50-dev/shared/tse/output/wikipedia-2/ ~/cs50-dev/shared/tse/output/wikipedia-2.index < where and or the
+testing.sh: line 50: where: No such file or directory
+
+./querier ~/cs50-dev/shared/tse/output/wikipedia-2/ ~/cs50-dev/shared/tse/output/wikipedia-2.index < where2
+testing.sh: line 52: where2: No such file or directory
+
+./querier ~/cs50-dev/shared/tse/output/wikipedia-2/ ~/cs50-dev/shared/tse/output/wikipedia-2.index <   sd            fklsd3
+testing.sh: line 54: sd: No such file or directory

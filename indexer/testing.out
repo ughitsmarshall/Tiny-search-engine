@@ -1,0 +1,13 @@
+Testing invalid args...\n
+pageDirectory is not a crawler directory!pageDirectory is not a crawler directory!Testing no args...\n
+Please provide pageDirectory and indexFilename only!Testing one arg...\n
+Please provide pageDirectory and indexFilename only!Testing three args...\n
+Please provide pageDirectory and indexFilename only!Testing invalid directory path...\n
+pageDirectory is not a crawler directory!Testing invalid directory path...\n
+Could not open file at path: ../crawler/fakepath/invalid.index
+Testing read-only directory...\n
+Could not open file at path: ../crawler/readonlydir/good.index
+Testing read-only file...\n
+Could not open file at path: ../crawler/fourthtest/readonlyindex.index
+Testing several valid tests...\n
+Testing indextest...\n

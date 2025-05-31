@@ -1,0 +1,133 @@
+ml () {  module ml "$@"
+}
+module () {  local _mlredir=1;
+ if [ -n "${MODULES_REDIRECT_OUTPUT+x}" ]; then
+ if [ "$MODULES_REDIRECT_OUTPUT" = '0' ]; then
+ _mlredir=0;
+ else
+ if [ "$MODULES_REDIRECT_OUTPUT" = '1' ]; then
+ _mlredir=1;
+ fi;
+ fi;
+ fi;
+ case " $@ " in 
+ *' --no-redirect '*)
+ _mlredir=0
+ ;;
+ *' --redirect '*)
+ _mlredir=1
+ ;;
+ esac;
+ if [ $_mlredir -eq 0 ]; then
+ _module_raw "$@";
+ else
+ _module_raw "$@" 2>&1;
+ fi
+}
+_module_raw () {  eval "$(/usr/bin/tclsh8.6 '/usr/lib/x86_64-linux-gnu/modulecmd.tcl' bash "$@")";
+ _mlstatus=$?;
+ return $_mlstatus
+}
+#!/bin/bash
+
+# test file for querier.c
+# querier pageDirectory indexFilename
+# Marshall Carey-Matthews 2 November 2024
+
+
+echo "Testing invalid args...\n"
+Testing invalid args...\n
+
+./querier sdgsdlsd sdlkjsdfljk
+pageDirectory is not a crawler directory!./querier ~/cs50-dev/shared/tse/output/wikipedia-2/ notAnIndex
+Could not open file at path: notAnIndex
+Could not build document index!./querier notaDir ~/cs50-dev/shared/tse/output/wikipedia-2.index
+pageDirectory is not a crawler directory!
+echo "Testing no args...\n"
+Testing no args...\n
+
+./querier
+Please provide pageDirectory and indexFilename only!
+echo "Testing one arg...\n"
+Testing one arg...\n
+
+./querier ~/cs50-dev/shared/tse/output/wikipedia-2/
+Please provide pageDirectory and indexFilename only!
+echo "Testing three args...\n"
+Testing three args...\n
+
+./querier ~/cs50-dev/shared/tse/output/wikipedia-2/ ~/cs50-dev/shared/tse/output/wikipedia-2.index 342902309423049
+Please provide pageDirectory and indexFilename only!
+echo "Testing valid tests...\n"
+Testing valid tests...\n
+
+./querier ~/cs50-dev/shared/tse/output/wikipedia-2/ ~/cs50-dev/shared/tse/output/wikipedia-2.index < validqueries.txt
+Query?
+Query: friends 
+Matches 8 documents (ranked):
+Score	8 Doc	255: http://cs50tse.cs.dartmouth.edu/tse/wikipedia/Swarthmore_College.html
+Score	3 Doc	212: http://cs50tse.cs.dartmouth.edu/tse/wikipedia/Dartmouth_College.html
+Score	3 Doc	221: http://cs50tse.cs.dartmouth.edu/tse/wikipedia/Saint_Anselm_College.html
+Score	2 Doc	135: http://cs50tse.cs.dartmouth.edu/tse/wikipedia/Karl_Pearson.html
+Score	1 Doc	109: http://cs50tse.cs.dartmouth.edu/tse/wikipedia/Natural_language.html
+Score	1 Doc	161: http://cs50tse.cs.dartmouth.edu/tse/wikipedia/Perl.html
+Score	1 Doc	251: http://cs50tse.cs.dartmouth.edu/tse/wikipedia/ECAC_Hockey.html
+Score	1 Doc	253: http://cs50tse.cs.dartmouth.edu/tse/wikipedia/Williams_College.html
+Query?
+Query: friends and where 
+Matches 7 documents (ranked):
+Score	3 Doc	212: http://cs50tse.cs.dartmouth.edu/tse/wikipedia/Dartmouth_College.html
+Score	3 Doc	221: http://cs50tse.cs.dartmouth.edu/tse/wikipedia/Saint_Anselm_College.html
+Score	2 Doc	135: http://cs50tse.cs.dartmouth.edu/tse/wikipedia/Karl_Pearson.html
+Score	1 Doc	109: http://cs50tse.cs.dartmouth.edu/tse/wikipedia/Natural_language.html
+Score	1 Doc	161: http://cs50tse.cs.dartmouth.edu/tse/wikipedia/Perl.html
+Score	1 Doc	253: http://cs50tse.cs.dartmouth.edu/tse/wikipedia/Williams_College.html
+Score	1 Doc	255: http://cs50tse.cs.dartmouth.edu/tse/wikipedia/Swarthmore_College.html
+Query?
+Query: friends and where 
+Matches 7 documents (ranked):
+Score	3 Doc	212: http://cs50tse.cs.dartmouth.edu/tse/wikipedia/Dartmouth_College.html
+Score	3 Doc	221: http://cs50tse.cs.dartmouth.edu/tse/wikipedia/Saint_Anselm_College.html
+Score	2 Doc	135: http://cs50tse.cs.dartmouth.edu/tse/wikipedia/Karl_Pearson.html
+Score	1 Doc	109: http://cs50tse.cs.dartmouth.edu/tse/wikipedia/Natural_language.html
+Score	1 Doc	161: http://cs50tse.cs.dartmouth.edu/tse/wikipedia/Perl.html
+Score	1 Doc	253: http://cs50tse.cs.dartmouth.edu/tse/wikipedia/Williams_College.html
+Score	1 Doc	255: http://cs50tse.cs.dartmouth.edu/tse/wikipedia/Swarthmore_College.html
+Query?
+Query: friends and where or msg 
+Matches 8 documents (ranked):
+Score	3 Doc	212: http://cs50tse.cs.dartmouth.edu/tse/wikipedia/Dartmouth_College.html
+Score	3 Doc	221: http://cs50tse.cs.dartmouth.edu/tse/wikipedia/Saint_Anselm_College.html
+Score	2 Doc	135: http://cs50tse.cs.dartmouth.edu/tse/wikipedia/Karl_Pearson.html
+Score	1 Doc	109: http://cs50tse.cs.dartmouth.edu/tse/wikipedia/Natural_language.html
+Score	1 Doc	161: http://cs50tse.cs.dartmouth.edu/tse/wikipedia/Perl.html
+Score	1 Doc	253: http://cs50tse.cs.dartmouth.edu/tse/wikipedia/Williams_College.html
+Score	1 Doc	255: http://cs50tse.cs.dartmouth.edu/tse/wikipedia/Swarthmore_College.html
+Score	1 Doc	243: http://cs50tse.cs.dartmouth.edu/tse/wikipedia/Union_Dutchmen.html
+Query?
+Query: where and msg 
+Matches 1 documents (ranked):
+Score	1 Doc	243: http://cs50tse.cs.dartmouth.edu/tse/wikipedia/Union_Dutchmen.html
+Query?
+Query: msg 
+Matches 1 documents (ranked):
+Score	1 Doc	243: http://cs50tse.cs.dartmouth.edu/tse/wikipedia/Union_Dutchmen.html
+Query?
+Query: fjfsdjlkfd 
+No documents found with this query!
+Query?
+
+echo "\n\nTesting invalid syntax...\n"
+\n\nTesting invalid syntax...\n
+
+./querier ~/cs50-dev/shared/tse/output/wikipedia-2/ ~/cs50-dev/shared/tse/output/wikipedia-2.index < invalidqueries.txt
+Query input too short! Word: f
+No leading and/or statements!
+No leading and/or statements!
+Do not end query with and/or!
+Do not end query with and/or!
+No consecutive and/or statements!
+No consecutive and/or statements!
+Non-letter/whitespace character: 2
+Query input too short! Word: sd
+Query?
