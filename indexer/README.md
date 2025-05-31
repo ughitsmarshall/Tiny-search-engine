@@ -7,4 +7,4 @@ The structure of this web indexer follows the requirements, design, and implemen
 
 ## Assumptions
 
-- The code assumes that the user is using a UNIX system, where the directory dividers are "/" and not "\". The user may or may not enter the "/" in directory arguments, if they so choose.
+- The code assumes that the user is using a UNIX system, where the directory dividers are "/" and not "\\". The user may or may not enter the "/" in directory arguments, if they so choose.
